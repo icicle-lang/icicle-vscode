@@ -1,0 +1,88 @@
+{
+	"name": "icicle-vscode",
+	"displayName": "icicle-vscode",
+	"description": "Icicle language plugin",
+	"version": "0.0.1",
+	"publisher": "icicle-lang",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/icicle-lang/icicle-vscode.git"
+	},
+	"engines": {
+		"vscode": "^1.30.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onLanguage:icicle"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"languages": [
+			{
+				"id": "icicle",
+				"extensions": [
+					".icicle"
+				],
+				"aliases": [
+					"Icicle"
+				],
+				"configuration": "data/icicle.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "icicle",
+				"scopeName": "source.icicle",
+				"path": "./syntaxes/icicle.tmGrammar.json"
+			}
+		],
+		"commands": [],
+		"configuration": {
+			"type": "object",
+			"title": "Icicle",
+			"properties": {
+				"icicle.server.executable": {
+					"type": "string",
+					"default": "icicle",
+					"description": "How to start the 'icicle' executable. You can set this to just 'icicle' if the executable is in your path when you start VSCode, otherwise give the full path to it."
+				},
+				"icicle.trace.server": {
+					"scope": "window",
+					"type": "string",
+					"enum": [
+						"off",
+						"messages",
+						"verbose"
+					],
+					"default": "off",
+					"description": "Trace the communication between VS Code and the language server. The output appears in the Icicle Language Server output channel in VSCode."
+				},
+				"icicle.trace.debug": {
+					"type": "string",
+					"default": null,
+					"description": "Log server side debug messages to this file. You will need to restart the Icicle extension after changing this."
+				}
+			}
+		}
+	},
+	"scripts": {
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"postinstall": "node ./node_modules/vscode/bin/install",
+		"test": "npm run compile && node ./node_modules/vscode/bin/test"
+	},
+	"devDependencies": {
+		"@types/mocha": "^2.2.42",
+		"@types/node": "^8.10.25",
+		"tslint": "^5.8.0",
+		"typescript": "^3.3.3",
+		"vscode": "^1.1.29"
+	},
+	"dependencies": {
+		"tsc": "^1.20150623.0",
+		"vsce": "^1.57.0",
+		"vscode-languageclient": "^3.5.1"
+	}
+}
