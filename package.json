@@ -71,7 +71,7 @@
 	},
 	"dependencies": {
 		"tsc": "^1.20150623.0",
-		"vsce": "^1.57.0",
+		"vsce": "^2.13.0",
 		"vscode-languageclient": "^3.5.1"
 	}
 }
