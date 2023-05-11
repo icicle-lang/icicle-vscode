@@ -3,17 +3,107 @@
 	"patterns": [
     { "include": "#comment" },
     { "include": "#expression" },
+    { "include": "#type-declaration" },
     { "include": "#type-signature" }
   ],
 	"repository": {
     "comment": {
       "patterns": [
-        { "include": "#comment-line" }
+        {
+          "include": "#comment_line"
+        },
+        {
+          "include": "#block_comment"
+        }
       ]
     },
-    "comment-line": {
+
+    "comment_line": {
         "match": "(--).*$\n?",
         "name":  "comment.line.icicle"
+    },
+
+    "block_comment": {
+      "applyEndPatternLast": 1,
+      "begin": "\\{-(?!#)",
+      "captures": {
+        "0": {
+          "name": "punctuation.definition.comment.icicle"
+        }
+      },
+      "end": "-\\}",
+      "name": "comment.block.icicle",
+      "patterns": [
+        {
+          "include": "#block_comment"
+        }
+      ]
+    },
+
+    "type-declaration": {
+      "begin": "^(type\\s+)([A-Z][a-zA-Z0-9_']*)\\s+",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.type.elm"
+        },
+        "2": {
+          "name": "storage.type.elm"
+        }
+      },
+      "end": "^(?=\\S)",
+      "name": "meta.function.type-declaration.elm",
+      "patterns": [
+        {
+          "name": "meta.record.field.elm",
+          "match": "^\\s*([A-Z][a-zA-Z0-9_]*)\\b",
+          "captures": {
+            "1": {
+              "name": "constant.type-constructor.elm"
+            }
+          }
+        },
+        {
+          "match": "\\s+",
+          "name": "punctuation.spaces.elm"
+        },
+        {
+          "name": "meta.record.field.elm",
+          "match": "(\\=|\\|)\\s+([A-Z][a-zA-Z0-9_]*)\\b",
+          "captures": {
+            "1": {
+              "name": "keyword.operator.assignment.elm"
+            },
+            "2": {
+              "name": "constant.type-constructor.elm"
+            }
+          }
+        },
+        {
+          "match": "\\=",
+          "name": "keyword.operator.assignment.elm"
+        },
+        {
+          "match": "\\-\\>",
+          "name": "keyword.operator.arrow.elm"
+        },
+        {
+          "include": "#module-prefix"
+        },
+        {
+          "match": "\\b[a-z][a-zA-Z0-9_]*\\b",
+          "name": "variable.type.elm"
+        },
+        {
+          "match": "\\b[A-Z][a-zA-Z0-9_]*\\b",
+          "name": "storage.type.elm"
+        },
+        {
+          "include": "#comments"
+        },
+        {
+          "include": "#type-record"
+        }
+      ]
     },
 
     "type-signature": {
@@ -51,7 +141,7 @@
           "include": "#module-prefix"
         },
         {
-          "match": "\\b[a-z][a-zA-Z0-9]*\\b",
+          "match": "\\b[a-z][a-zA-Z0-9_]*\\b",
           "name": "variable.type.icicle"
         },
         {
@@ -94,7 +184,7 @@
 			"name": "entity.name.function.icicle"
 		},
 		"keyword-term": {
-			"match": "\\b(from|let|in|if|then|else|case|of|seq|fold|fold1|filter|windowed|latest|group|distinct|where|module|import)\\b",
+			"match": "\\b(from|let|in|if|then|else|case|of|seq|fold|fold1|filter|windowed|latest|group|array|distinct|where|module|import)\\b",
 			"name": "keyword.control.expression.term.icicle"
 		},
     "prim-operator": {

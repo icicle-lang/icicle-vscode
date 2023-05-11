@@ -18,9 +18,9 @@ export function activate(context: vscode.ExtensionContext) {
                 = vscode.workspace.getConfiguration('icicle').get('trace.debug');
 
         let args: string[]
-                =  ("" + cfgDebugLog) === ""
-                        ? ['lsp']
-                        : ['lsp', '--debug-path', "" + cfgDebugLog];
+                = cfgDebugLog && typeof cfgDebugLog == "string"
+						? ['lsp', '--debug-path', cfgDebugLog]
+						: ['lsp'];
 
         // Start the language server.
 	let serverOptions: vsclient.ServerOptions = {
