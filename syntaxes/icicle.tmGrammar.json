@@ -1,28 +1,19 @@
 {
-	"scopeName": "source.icicle",
-	"patterns": [
-    { "include": "#comment" },
-    { "include": "#expression" },
-    { "include": "#type-declaration" },
-    { "include": "#type-signature" }
+  "patterns": [
+    {
+      "include": "#comment"
+    },
+    {
+      "include": "#expression"
+    },
+    {
+      "include": "#type-declaration"
+    },
+    {
+      "include": "#type-signature"
+    }
   ],
-	"repository": {
-    "comment": {
-      "patterns": [
-        {
-          "include": "#comment_line"
-        },
-        {
-          "include": "#block_comment"
-        }
-      ]
-    },
-
-    "comment_line": {
-        "match": "(--).*$\n?",
-        "name":  "comment.line.icicle"
-    },
-
+  "repository": {
     "block_comment": {
       "applyEndPatternLast": 1,
       "begin": "\\{-(?!#)",
@@ -39,7 +30,156 @@
         }
       ]
     },
-
+    "comment": {
+      "patterns": [
+        {
+          "include": "#comment_line"
+        },
+        {
+          "include": "#block_comment"
+        }
+      ]
+    },
+    "comment_line": {
+      "match": "(--).*$\n?",
+      "name": "comment.line.icicle"
+    },
+    "dictionary-term": {
+      "match": "\\b(feature)\\b",
+      "name": "entity.name.function.icicle"
+    },
+    "expression": {
+      "patterns": [
+        {
+          "include": "#keyword-term"
+        },
+        {
+          "include": "#dictionary-term"
+        },
+        {
+          "include": "#prim-operator"
+        },
+        {
+          "include": "#prim-constructor"
+        },
+        {
+          "include": "#prim-numeric"
+        },
+        {
+          "include": "#paren-round-expression"
+        },
+        {
+          "include": "#paren-square-expression"
+        },
+        {
+          "include": "#paren-brace-expression"
+        },
+        {
+          "include": "#string-quote"
+        }
+      ]
+    },
+    "keyword-term": {
+      "match": "\\b(from|let|scan|in|if|then|else|case|of|seq|fold|fold1|filter|windowed|latest|group|array|distinct|where|module|import)\\b",
+      "name": "keyword.control.expression.term.icicle"
+    },
+    "paren-brace-expression": {
+      "begin": "\\{",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.paren.brace.open.icicle"
+        }
+      },
+      "end": "\\}",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.paren.brace.close.icicle"
+        }
+      },
+      "name": "expression.group.brace.icicle",
+      "patterns": [
+        {
+          "include": "#expression"
+        }
+      ]
+    },
+    "paren-round-expression": {
+      "begin": "\\(",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.paren.round.open.icicle"
+        }
+      },
+      "end": "\\)",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.paren.round.close.icicle"
+        }
+      },
+      "name": "expression.group.round.icicle",
+      "patterns": [
+        {
+          "include": "#expression"
+        }
+      ]
+    },
+    "paren-square-expression": {
+      "begin": "\\[",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.paren.square.open.icicle"
+        }
+      },
+      "end": "\\]",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.paren.square.close.icicle"
+        }
+      },
+      "name": "expression.group.square.icicle",
+      "patterns": [
+        {
+          "include": "#expression"
+        }
+      ]
+    },
+    "prim-constructor": {
+      "match": "\\#[A-Z][a-zA-Z0-9']*",
+      "name": "constant.primitive.constructor.icicle"
+    },
+    "prim-numeric": {
+      "match": "\\b[0-9]+\\b",
+      "name": "constant.numeric.icicle"
+    },
+    "prim-operator": {
+      "match": "\\#[a-z][a-zA-Z0-9']*",
+      "name": "constant.primitive.operator.icicle"
+    },
+    "string-quote": {
+      "begin": "\"",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.begin.elm"
+        }
+      },
+      "end": "\"",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.string.end.elm"
+        }
+      },
+      "name": "string.quoted.double.elm",
+      "patterns": [
+        {
+          "match": "\\\\(NUL|SOH|STX|ETX|EOT|ENQ|ACK|BEL|BS|HT|LF|VT|FF|CR|SO|SI|DLE|DC1|DC2|DC3|DC4|NAK|SYN|ETB|CAN|EM|SUB|ESC|FS|GS|RS|US|SP|DEL|[abfnrtv\\\\\\\"'\\&]|x[0-9a-fA-F]{1,5})",
+          "name": "constant.character.escape.elm"
+        },
+        {
+          "match": "\\^[A-Z@\\[\\]\\\\\\^_]",
+          "name": "constant.character.escape.control.elm"
+        }
+      ]
+    },
     "type-declaration": {
       "begin": "^(type\\s+)([A-Z][a-zA-Z0-9_']*)\\s+",
       "beginCaptures": {
@@ -54,21 +194,19 @@
       "name": "meta.function.type-declaration.elm",
       "patterns": [
         {
-          "name": "meta.record.field.elm",
-          "match": "^\\s*([A-Z][a-zA-Z0-9_]*)\\b",
           "captures": {
             "1": {
               "name": "constant.type-constructor.elm"
             }
-          }
+          },
+          "match": "^\\s*([A-Z][a-zA-Z0-9_]*)\\b",
+          "name": "meta.record.field.elm"
         },
         {
           "match": "\\s+",
           "name": "punctuation.spaces.elm"
         },
         {
-          "name": "meta.record.field.elm",
-          "match": "(\\=|\\|)\\s+([A-Z][a-zA-Z0-9_]*)\\b",
           "captures": {
             "1": {
               "name": "keyword.operator.assignment.elm"
@@ -76,7 +214,9 @@
             "2": {
               "name": "constant.type-constructor.elm"
             }
-          }
+          },
+          "match": "(\\=|\\|)\\s+([A-Z][a-zA-Z0-9_]*)\\b",
+          "name": "meta.record.field.elm"
         },
         {
           "match": "\\=",
@@ -105,7 +245,6 @@
         }
       ]
     },
-
     "type-signature": {
       "begin": "^(input\\s+)?([a-z_][a-zA-Z0-9_']*)\\s+(\\:)",
       "beginCaptures": {
@@ -165,100 +304,7 @@
           "include": "#type-record"
         }
       ]
-    },
-    "expression": {
-			"patterns": [
-        { "include": "#keyword-term" },
-        { "include": "#dictionary-term" },
-        { "include": "#prim-operator" },
-        { "include": "#prim-constructor" },
-        { "include": "#prim-numeric"},
-        { "include": "#paren-round-expression" },
-        { "include": "#paren-square-expression" },
-        { "include": "#paren-brace-expression" },
-        { "include": "#string-quote" }
-      ]
-    },
-		"dictionary-term": {
-			"match": "\\b(feature)\\b",
-			"name": "entity.name.function.icicle"
-		},
-		"keyword-term": {
-			"match": "\\b(from|let|in|if|then|else|case|of|seq|fold|fold1|filter|windowed|latest|group|array|distinct|where|module|import)\\b",
-			"name": "keyword.control.expression.term.icicle"
-		},
-    "prim-operator": {
-            "match": "\\#[a-z][a-zA-Z0-9']*" ,
-            "name": "constant.primitive.operator.icicle"
-    },
-    "prim-constructor": {
-            "match": "\\#[A-Z][a-zA-Z0-9']*" ,
-            "name": "constant.primitive.constructor.icicle"
-    },
-    "prim-numeric": {
-            "match": "\\b[0-9]+\\b",
-            "name":  "constant.numeric.icicle"
-    },
-    "paren-round-expression": {
-			"begin": "\\(",
-			"end": "\\)",
-			"beginCaptures": {
-				"0": { "name": "punctuation.paren.round.open.icicle" }
-			},
-			"endCaptures": {
-				"0": { "name": "punctuation.paren.round.close.icicle" }
-			},
-			"name": "expression.group.round.icicle",
-			"patterns": [{ "include": "#expression" }]
-		},
-    "paren-square-expression": {
-			"begin": "\\[",
-			"end": "\\]",
-			"beginCaptures": {
-				"0": { "name": "punctuation.paren.square.open.icicle" }
-			},
-			"endCaptures": {
-				"0": { "name": "punctuation.paren.square.close.icicle" }
-			},
-			"name": "expression.group.square.icicle",
-			"patterns": [{ "include": "#expression" }]
-		},
-    "paren-brace-expression": {
-			"begin": "\\{",
-			"end": "\\}",
-			"beginCaptures": {
-				"0": { "name": "punctuation.paren.brace.open.icicle" }
-			},
-			"endCaptures": {
-				"0": { "name": "punctuation.paren.brace.close.icicle" }
-			},
-			"name": "expression.group.brace.icicle",
-			"patterns": [{ "include": "#expression" }]
-    },
-    "string-quote": {
-      "name": "string.quoted.double.elm",
-      "begin": "\"",
-      "beginCaptures": {
-        "0": {
-          "name": "punctuation.definition.string.begin.elm"
-        }
-      },
-      "end": "\"",
-      "endCaptures": {
-        "0": {
-          "name": "punctuation.definition.string.end.elm"
-        }
-      },
-      "patterns": [
-        {
-          "match": "\\\\(NUL|SOH|STX|ETX|EOT|ENQ|ACK|BEL|BS|HT|LF|VT|FF|CR|SO|SI|DLE|DC1|DC2|DC3|DC4|NAK|SYN|ETB|CAN|EM|SUB|ESC|FS|GS|RS|US|SP|DEL|[abfnrtv\\\\\\\"'\\&]|x[0-9a-fA-F]{1,5})",
-          "name": "constant.character.escape.elm"
-        },
-        {
-          "match": "\\^[A-Z@\\[\\]\\\\\\^_]",
-          "name": "constant.character.escape.control.elm"
-        }
-      ]
     }
-  }
+  },
+  "scopeName": "source.icicle"
 }
