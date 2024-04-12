@@ -1,30 +1,29 @@
 
-import * as vscode   from 'vscode';
+import * as vscode from 'vscode';
 import * as vsclient from 'vscode-languageclient';
 
 export function activate(context: vscode.ExtensionContext) {
+	// Get the server path from the config.
+	let cfgServerPath: string | undefined
+		= vscode.workspace.getConfiguration('icicle').get('server.executable');
 
-        // Get the server path from the config.
-        let cfgServerPath: string | undefined
-                = vscode.workspace.getConfiguration('icicle').get('server.executable');
+	let serverPath: string
+		= ("" + cfgServerPath) === ""
+			? 'icicle'
+			: "" + cfgServerPath;
 
-        let serverPath: string
-                = ("" + cfgServerPath) === ""
-                        ? 'icicle'
-                        : "" + cfgServerPath;
+	// Get the debug log from the config, if it's set.
+	let cfgDebugLog: string | undefined
+		= vscode.workspace.getConfiguration('icicle').get('trace.debug');
 
-        // Get the debug log from the config, if it's set.
-        let cfgDebugLog: string | undefined
-                = vscode.workspace.getConfiguration('icicle').get('trace.debug');
+	let args: string[]
+		= cfgDebugLog && typeof cfgDebugLog == "string"
+			? ['lsp', '--debug-path', cfgDebugLog]
+			: ['lsp'];
 
-        let args: string[]
-                = cfgDebugLog && typeof cfgDebugLog == "string"
-						? ['lsp', '--debug-path', cfgDebugLog]
-						: ['lsp'];
-
-        // Start the language server.
+	// Start the language server.
 	let serverOptions: vsclient.ServerOptions = {
-		run:   { command: serverPath, args: args },
+		run: { command: serverPath, args: args },
 		debug: { command: serverPath, args: args }
 	};
 
@@ -41,7 +40,8 @@ export function activate(context: vscode.ExtensionContext) {
 		'Icicle Language Server',
 		serverOptions,
 		clientOptions).start();
+
 	context.subscriptions.push(dClient);
 }
 
-export function deactivate() {}
+export function deactivate() { }
