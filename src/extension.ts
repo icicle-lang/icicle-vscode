@@ -1,6 +1,8 @@
 
 import * as vscode from 'vscode';
-import * as vsclient from 'vscode-languageclient';
+import * as vsclient from 'vscode-languageclient/node';
+
+let client: vsclient.LanguageClient;
 
 export function activate(context: vscode.ExtensionContext) {
 	// Get the server path from the config.
@@ -35,13 +37,19 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	};
 
-	let dClient = new vsclient.LanguageClient(
+	client = new vsclient.LanguageClient(
 		'icicle',
 		'Icicle Language Server',
 		serverOptions,
-		clientOptions).start();
+		clientOptions
+	);
 
-	context.subscriptions.push(dClient);
+	client.start();
 }
 
-export function deactivate() { }
+export function deactivate(): Thenable<void> | undefined {
+  if (!client) {
+    return undefined;
+  }
+  return client.stop();
+}
